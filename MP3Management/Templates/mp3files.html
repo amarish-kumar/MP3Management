@@ -1,0 +1,43 @@
+﻿<div class="col-md-12">
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Album Name</th>
+        </tr>
+
+        <tr ng-repeat="file in model.data">
+            <td><a href="#!/mp3details/{{file.MP3FileID}}">{{file.Name}}</a></td>
+            <td>{{file.Author}}</td>
+            <td>{{file.AlbumName}}</td>
+            <td>
+                <a ng-click="editMP3File(file.MP3FileID, file.Name, file.Author, file.AlbumName)"><i class="fa fa-pencil" aria-hidden="true"></i></a> |
+                <a ng-click="deleteMP3File(file.MP3FileID)"><i class="fa fa-trash-o"></i></a> 
+                <md-menu>
+                    <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                        Add to
+                    </md-button>
+                    <md-menu-content width="6">
+                        <md-menu-item  ng-repeat="item in playlists.data">
+                            <md-button ng-click="announceClick(file.MP3FileID, item.PlaylistID)">
+                                {{item.Name}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </td>
+        </tr>
+        <tr ng-if="states.showMP3Form">
+            <td>
+                <input type="hidden" ng-model="new.MP3File.MP3FileID" />
+                <input type="text" class="form-control" placeholder="Name" ng-model="new.MP3File.Name" />
+            </td>
+            <td><input type="text" class="form-control" placeholder="Author" ng-model="new.MP3File.Author" /></td>
+            <td><input type="text" class="form-control" placeholder="Album Name" ng-model="new.MP3File.AlbumName" /></td>
+            <td><button type="button" class="btn btn-default" ng-click="addMP3File()">OK</button></td>
+            <td><button type="button" class="btn btn-default" ng-click="showMP3Form(false)">Cancel</button></td>
+        </tr>
+    </table>
+    <a ng-click="showMP3Form(true)" class="btn btn-primary">Add MP3</a>
+    <br />
+</div>
