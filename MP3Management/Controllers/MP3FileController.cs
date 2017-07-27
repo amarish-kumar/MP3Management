@@ -112,27 +112,25 @@ namespace MP3Management.Controllers
         }
         public string AddToPlaylist(int mp3Id, int playlistId)
         {
-            try
-            {
+            //try
+            //{
                 MP3File mp3file = db.MP3File.Find(mp3Id);
                 Playlist playlist = db.Playlist.Find(playlistId);
-                if (playlist.MP3Files.Contains(mp3file))
-                {
-                    return JsonConvert.SerializeObject("MP3 already in playlist!", Formatting.Indented);
-                }
-                else
+                if (!playlist.MP3Files.Contains(mp3file))
                 {
                     playlist.MP3Files.Add(mp3file);
                     db.Entry(playlist).State = EntityState.Modified;
                     db.SaveChanges();
                     //return Json("Predmet added to student list!", JsonRequestBehavior.AllowGet);
-                    return JsonConvert.SerializeObject("MP3 added!", Formatting.Indented);
                 }
-            }
-            catch (Exception ex)
-            {
-                return JsonConvert.SerializeObject("Error adding mp3 to playlist!", Formatting.Indented);
-            }
+                return JsonConvert.SerializeObject(mp3file, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }); //and push it to the $scope
+
+            //}
+            //catch (Exception ex)
+            //{
+            //return JsonConvert.SerializeObject("Error adding mp3 to playlist!", Formatting.Indented);
+
+            //}
         }
     }
 }

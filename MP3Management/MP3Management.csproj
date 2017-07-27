@@ -149,6 +149,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MP3FileController.cs" />
+    <Compile Include="Controllers\PlaylistsController.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -167,6 +168,7 @@
     <Content Include="app\controllers\MP3DetailsController.js" />
     <Content Include="app\controllers\MP3FilesController.js" />
     <Content Include="app\controllers\PlaylistController.js" />
+    <Content Include="app\controllers\PlaylistDetailsController.js" />
     <Content Include="app\controllers\RouteController.js" />
     <Content Include="Content\angular-material.css" />
     <Content Include="Content\angular-material.layout-attributes.css" />
@@ -177,6 +179,8 @@
     <Content Include="Content\angular-material.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\ic_close_24px.svg" />
+    <Content Include="Content\img\mp3.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome\css\font-awesome.css" />
     <Content Include="fonts\font-awesome\css\font-awesome.min.css" />
@@ -988,6 +992,7 @@
     <Content Include="Templates\mp3details.html" />
     <Content Include="Templates\mp3files.html" />
     <Content Include="Templates\playlist.html" />
+    <Content Include="Templates\playlistDetails.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1007,6 +1012,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\MP3File\" />
+    <Folder Include="Views\Playlists\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

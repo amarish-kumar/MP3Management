@@ -1,7 +1,12 @@
-﻿<ul>
-    <li><a href="#!/mp3files">MP3 Files</a></li>
-    <li><a href="#!/playlist">Playlist</a></li>
-</ul>
-<div class="mainContent">
-    <div ng-view></div>
+﻿<div ng-cloak layout-margin>
+    <md-content class="md-padding">
+        <md-nav-bar md-selected-nav-item="currentNavItem"
+                    nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-href="#!/mp3files" name="mp3files">MP3 Files</md-nav-item>        
+            <md-nav-item md-nav-href="#!/playlist" name="playlist">Playlist</md-nav-item>
+        </md-nav-bar>
+        <div class="ext-content" layout-padding>
+            <div ng-view></div>
+        </div>
+    </md-content>
 </div>

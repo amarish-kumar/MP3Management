@@ -1,4 +1,38 @@
-﻿<div>
-    <h1>Playlist</h1>
-    {{message}}
+﻿<div ng-cloak>
+    <md-content>
+        <md-list>
+            <div>
+                <md-content class="md-no-momentum" layout padding>
+                    <md-input-container class="md-block" flex="20">
+                        <label>Name</label>
+                        <input ng-model="new.Playlist.Name">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex="70">
+                        <label>Description</label>
+                        <input ng-model="new.Playlist.Description">
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-if="states.allowEditPlaylist">
+                        <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-if="states.allowEditPlaylist">
+                        <md-button class="md-primary md-raised" ng-click="updatePlaylist()">Update</md-button>
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-if="states.allowEditPlaylist === false">
+                        <md-button class="md-primary md-raised" ng-click="createPlaylist()">New</md-button>
+                    </md-input-container>
+                </md-content>
+            </div>
+            <md-divider></md-divider>
+            <md-list-item class="md-3-line" ng-repeat="p in model.data" ng-href="#!/playlistDetails/{{p.PlaylistID}}">
+                <div class="md-list-item-text">
+                    <h3>{{ p.Name }}</h3>
+                    <h4>{{ p.Description }}</h4>
+                    <p ng-if="p.MP3Files[0]">{{p.MP3Files[0].Name}}, {{p.MP3Files[1].Name}} ...</p>
+                </div>
+                <md-button class="md-secondary" ng-click="editPlaylist(p.PlaylistID, p.Name, p.Description)">Edit</md-button>
+                <md-button class="md-secondary" ng-click="deletePlaylist(p.PlaylistID)">Delete</md-button>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
 </div>

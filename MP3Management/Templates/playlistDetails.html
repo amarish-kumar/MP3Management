@@ -1,0 +1,45 @@
+﻿<div ng-cloak>
+    <md-toolbar class="md-theme-light">
+        <div class="md-toolbar-tools">
+            <h2>
+                {{playlistDetails.Name}}
+                <md-tooltip md-direction="right">{{playlistDetails.Description}}</md-tooltip>
+            </h2> 
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
+                    Add mp3
+                </md-button>
+                <md-menu-content width="6">
+                    <md-menu-item ng-repeat="item in allmp3files.data">
+                        <md-button ng-click="announceClick(item.MP3FileID, playlistDetails.PlaylistID)">
+                            <div layout="row" flex>
+                                <h5 flex>{{item.Name}}</h5>
+                                <small>{{item.Author}}</small>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+
+    <md-content>
+        <md-subheader class="md-no-sticky">{{playlistDetails.Description}}</md-subheader>
+        <md-divider></md-divider>
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in playlistDetails.MP3Files">
+                <div class="md-list-item-text">
+                    <h3>{{item.Name}}</h3>
+                    <h4>{{item.Author}}</h4>
+                    <p>{{item.AlbumName}}</p>
+                </div>
+                <md-button class="md-secondary" ng-click="removeMp3FromPlaylist(item.MP3FileID, playlistDetails.PlaylistID)">Remove</md-button>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
+<md-input-container class="md-block">
+    <md-button class="md-primary md-raised" ng-href="#!/playlist">Back</md-button>
+</md-input-container>

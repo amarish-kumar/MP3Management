@@ -17,5 +17,9 @@
             templateUrl: "Templates/mp3details.html",
             controller: "MP3DetailsCtrl"
         })
+        .when("/playlistDetails/:id", {
+            templateUrl: "Templates/playlistDetails.html",
+            controller: "PlaylistDetailsCtrl"
+        })
         .otherwise({ redirectTo: '/' });
-});
+    });
