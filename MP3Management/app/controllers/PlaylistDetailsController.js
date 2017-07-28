@@ -1,5 +1,5 @@
 ﻿angular.module("PlaylistDetailsController", [])
-    .controller("PlaylistDetailsCtrl", ["$scope", "$http", "$routeParams", function ($scope, $http, $routeParams) {
+    .controller("PlaylistDetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
         $scope.playlistDetails = {};
         $scope.allmp3files = {};
         $http({
@@ -27,6 +27,19 @@
                     return element.MP3FileID;
                 }).indexOf(mp3Id);
                 $scope.playlistDetails.MP3Files.splice(index, 1);
+            });
+        };
+        $scope.showConfirm = function (ev, mp3Id, playlistId) {
+            var confirm = $mdDialog.confirm()
+                .title('Are you sure you want to remove this record from the playlist \"' + $scope.playlistDetails.Name+"\"?")
+                .textContent('The action is irreversible!')
+                .ariaLabel('Delete record')
+                .targetEvent(ev)
+                .ok('Delete')
+                .cancel('Cancel');
+
+            $mdDialog.show(confirm).then(function () {
+                $scope.removeMp3FromPlaylist(mp3Id, playlistId);
             });
         };
     }])

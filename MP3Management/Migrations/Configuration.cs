@@ -1,11 +1,8 @@
 namespace MP3Management.Migrations
 {
     using MP3Management.Models;
-    using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<MP3Management.Data.ApplicationDbContext>
     {

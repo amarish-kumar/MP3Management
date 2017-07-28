@@ -2,28 +2,59 @@
     <md-content>
         <md-list>
             <div>
-                <md-content class="md-no-momentum" layout padding>
-                    <md-input-container class="md-block" flex="20">
-                        <label>Name</label>
-                        <input ng-model="new.MP3File.Name">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex="70">
-                        <label>Author</label>
-                        <input ng-model="new.MP3File.Author">
-                    </md-input-container>
-                    <md-input-container class="md-block" flex="70">
-                        <label>Album Name</label>
-                        <input ng-model="new.MP3File.AlbumName">
-                    </md-input-container>
-                    <md-input-container class="md-block" ng-if="states.allowEditMP3File">
-                        <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
-                    </md-input-container>
-                    <md-input-container class="md-block" ng-if="states.allowEditMP3File">
-                        <md-button class="md-primary md-raised" ng-click="updatePlaylist()">Update</md-button>
-                    </md-input-container>
-                    <md-input-container class="md-block" ng-if="states.allowEditMP3File === false">
-                        <md-button class="md-primary md-raised" ng-click="addMP3File()">New</md-button>
-                    </md-input-container>
+                <md-content class="md-no-momentum">
+                    <form name="inputForm" ng-submit="addMP3File()">
+                        <div layout="row" layout-align="space-around">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Name</label>
+                            <input ng-model="new.MP3File.Name" required name="name">
+                            <div ng-messages="projectForm.clientName.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Author</label>
+                            <input ng-model="new.MP3File.Author" required>
+                            <div ng-messages="projectForm.clientName.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Album Name</label>
+                            <input ng-model="new.MP3File.AlbumName" required flex>
+                            <div ng-messages="projectForm.clientName.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block" ng-if="states.allowEditMP3File">
+                            <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
+                        </md-input-container>
+                        <md-input-container class="md-block" ng-if="states.allowEditMP3File">
+                            <md-button class="md-primary md-raised" ng-click="updatePlaylist()" type="submit">Update</md-button>
+                        </md-input-container>
+                        <md-input-container class="md-block" ng-if="states.allowEditMP3File === false">
+                            <md-button class="md-primary md-raised" type="submit">New</md-button>
+                        </md-input-container>
+                        </div>
+                        </form>
+                    <form ng-submit="searchMP3files(searchString, searchBy)">
+                        <div layout="row" layout-align="left left">
+                            <div layout="column" layout-align="space-between center" layout-margin>
+                                <md-select ng-model="searchBy" placeholder="Search by" class="md-no-underline">
+                                    <md-option value="name">Name</md-option>
+                                    <md-option value="author">Author</md-option>
+                                    <md-option value="playlist">Playlist</md-option>
+                                </md-select>
+                            </div>
+                            <md-input-container class="md-block">
+                                <label>Search</label>
+                                <input ng-model="searchString" required name="search">
+                                <div ng-messages="projectForm.clientName.$error">
+                                    <div ng-message="required">This is required for search.</div>
+                                </div>
+                            </md-input-container>
+                         </div>
+                     </form>
                 </md-content>
             </div>
             <md-divider></md-divider>
@@ -34,15 +65,15 @@
                     <p>{{file.AlbumName}}</p>
                 </div>
                 <md-button class="md-secondary" ng-click="editMP3File(file.MP3FileID, file.Name, file.Author, file.AlbumName)">Edit</md-button>
-                <md-button class="md-secondary" ng-click="deleteMP3File(file.MP3FileID)">Delete</md-button>
+                <md-button class="md-secondary" ng-click="showConfirm($event, file.MP3FileID)">Delete</md-button>
                 <md-menu>
-                    <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                    <md-button aria-label="Add to Playlist" class="md-button" ng-mousedown="$mdMenu.open()">
                         Add to
                     </md-button>
                     <md-menu-content width="6">
-                        <md-menu-item ng-repeat="item in playlists.data">
-                            <md-button ng-click="announceClick(file.MP3FileID, item.PlaylistID)">
-                                {{item.Name}}
+                        <md-menu-item ng-repeat="p in playlists.data">
+                            <md-button ng-click="announceClick(file.MP3FileID, p.PlaylistID)">
+                                {{p.Name}}
                             </md-button>
                         </md-menu-item>
                     </md-menu-content>

@@ -49,5 +49,17 @@
                 });
             });
         };
+        $scope.showConfirm = function (ev, PlaylistID, PlaylistName) {
+            var confirm = $mdDialog.confirm()
+                .title("Are you sure you want to delete the playlist \"" + PlaylistName+"\"?")
+                .textContent('The action is irreversible!')
+                .ariaLabel('Delete playlist')
+                .targetEvent(ev)
+                .ok('Delete')
+                .cancel('Cancel');
 
+            $mdDialog.show(confirm).then(function () {
+                $scope.deletePlaylist(PlaylistID);
+            });
+        };
     }])

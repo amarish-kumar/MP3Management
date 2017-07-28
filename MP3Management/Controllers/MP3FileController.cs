@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MP3Management.Data;
@@ -17,38 +15,70 @@ namespace MP3Management.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: MP3File
-        public ActionResult Index()
+        public string Index()
         {
-            var data = db.MP3File.Select(p => new
+            var data = db.MP3File.Include(p => p.Playlists).ToList();
+            return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+        }
+
+        public string Search(string SearchString, string SearchBy)
+        {
+            if (!String.IsNullOrEmpty(SearchString))
             {
-                MP3FileID = p.MP3FileID,
-                Name = p.Name,
-                Author = p.Author,
-                AlbumName = p.AlbumName
-            }).ToList();
-            return Json(data, JsonRequestBehavior.AllowGet);
+                SearchString = SearchString.ToLower();
+
+                if (SearchBy.Equals("name"))
+                {
+                    var data = db.MP3File.Where(s => s.Name.ToLower().Contains(SearchString)).Include(p => p.Playlists).ToList();
+                    return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                }
+                else if (SearchBy.Equals("author"))
+                {
+                    var data1 = db.MP3File.Where(d => d.Author.ToLower().Contains(SearchString)).Include(p => p.Playlists).ToList();
+                    return JsonConvert.SerializeObject(data1, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                }
+                else
+                {
+                    var playlist = db.Playlist.Where(p => p.Name.ToLower().Contains(SearchString)).Include(m => m.MP3Files);
+                    var data2 = playlist.SelectMany(s => s.MP3Files).ToList();
+                    return JsonConvert.SerializeObject(data2, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                }
+            }
+            throw new HttpException(400, "There were errors in your model");
+
+            #region *********  search without ComboBox selection "Search by"  *********
+            /*
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                // name
+                var data = db.MP3File.Where(s => s.Name.ToLower().Contains(SearchString)).Include(p => p.Playlists);
+                // author
+                var data1 = db.MP3File.Where(d => d.Author.ToLower().Contains(SearchString)).Include(p => p.Playlists);
+                //playlist
+                var playlist = db.Playlist.Where(p => p.Name.ToLower().Contains(SearchString)).Include(m => m.MP3Files);
+                var data2 = playlist.SelectMany(s => s.MP3Files);
+
+                var result = data.Union(data1).Union(data2);
+                return JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            }
+            throw new HttpException(400, "There were errors in your model");
+            */
+            #endregion
         }
 
         // GET: MP3File/Details/5
-        public ActionResult MP3Details(int? id)
+        public string MP3Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var data = db.MP3File.Select(p => new
-            {
-                MP3FileID = p.MP3FileID,
-                Name = p.Name,
-                Author = p.Author,
-                AlbumName = p.AlbumName
-            }).Where(s => s.MP3FileID == id).FirstOrDefault();
-
+            var data = db.MP3File.Where(s => s.MP3FileID == id).Include(m => m.Playlists).FirstOrDefault();
             if (data == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
             }
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         [HttpPost]
@@ -114,16 +144,16 @@ namespace MP3Management.Controllers
         {
             //try
             //{
-                MP3File mp3file = db.MP3File.Find(mp3Id);
-                Playlist playlist = db.Playlist.Find(playlistId);
-                if (!playlist.MP3Files.Contains(mp3file))
-                {
-                    playlist.MP3Files.Add(mp3file);
-                    db.Entry(playlist).State = EntityState.Modified;
-                    db.SaveChanges();
-                    //return Json("Predmet added to student list!", JsonRequestBehavior.AllowGet);
-                }
-                return JsonConvert.SerializeObject(mp3file, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }); //and push it to the $scope
+            MP3File mp3file = db.MP3File.Find(mp3Id);
+            Playlist playlist = db.Playlist.Find(playlistId);
+            if (!playlist.MP3Files.Contains(mp3file))
+            {
+                playlist.MP3Files.Add(mp3file);
+                db.Entry(playlist).State = EntityState.Modified;
+                db.SaveChanges();
+                //return Json("Predmet added to student list!", JsonRequestBehavior.AllowGet);
+            }
+            return JsonConvert.SerializeObject(mp3file, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }); //and push it to the $scope
 
             //}
             //catch (Exception ex)

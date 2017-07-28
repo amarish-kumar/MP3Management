@@ -48,21 +48,33 @@
             $scope.new.MP3File = { MP3FileID: id, Name: name, Author: author, AlbumName: albumName };
             $scope.states.allowEditMP3File = true;
         };
-        var originatorEv;
-
-        $scope.menuHref = "http://www.google.com/design/spec/components/menus.html#menus-specs";
-        $scope.openMenu = function ($mdMenu, ev) {
-            originatorEv = ev;
-            $mdMenu.open(ev);
-        };
-
         $scope.announceClick = function (mp3Id, playlistId) {
             $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId : playlistId}).then(function (response) {
                 //todo 
             });
         };
+        $scope.searchMP3files = function (searchString, searchBy) {
+            $http({
+                url: "/MP3File/Search",
+                params: { SearchString: searchString, SearchBy: searchBy },
+                method: "get"
+            })
+                .then(function (response) {
+                $scope.model = response;
+                });
+        };
+        $scope.showConfirm = function (ev, MP3FileID) {
+            var confirm = $mdDialog.confirm()
+                .title('Are you sure you want to delete this mp3 record?')
+                .textContent('The action is irreversible!')
+                .ariaLabel('Delete record')
+                .targetEvent(ev)
+                .ok('Delete')
+                .cancel('Cancel');
+
+            $mdDialog.show(confirm).then(function () {
+                $scope.deleteMP3File(MP3FileID);
+            });
+        };
     }])
-
-
-
 
