@@ -1,29 +1,79 @@
-﻿<div layout="row" layout-align="left left">
-    <md-card md-theme="dark-purple" md-theme-watch>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">{{mp3details.Name}}</span>
-                <span class="md-subhead">{{mp3details.Author}}</span>
-                <span class="md-subhead">{{mp3details.AlbumName}}</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row" layout-align="space-between">
-            <div class="md-media-xl card-media"></div>
-
-            <md-card-actions layout="column">
-                <md-button class="md-button" aria-label="Favorite">
-                    Action 1
-                </md-button>
-                <md-button class="md-button" aria-label="Settings">
-                    Action 2
-                </md-button>
-                <md-button class="md-button" aria-label="Share">
-                    Action 3
-                </md-button>
-            </md-card-actions>
-        </md-card-content>
-    </md-card>
+﻿<div ng-if="status !== null">
+    <!--Show message area after deleting record-->
+    {{status}}
+</div>
+<div ng-if="status === null">
+    <form name="inputForm" ng-submit="updateMP3File()" ng-if="states.allowEditMP3File">
+        <div layout="row" layout-align="space-around">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Name</label>
+                <input ng-model="new.MP3File.Name" required name="name">
+                <div ng-messages="projectForm.clientName.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Author</label>
+                <input ng-model="new.MP3File.Author" required>
+                <div ng-messages="projectForm.clientName.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Album Name</label>
+                <input ng-model="new.MP3File.AlbumName" required flex>
+                <div ng-messages="projectForm.clientName.$error">
+                    <div ng-message="required">This is required.</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <md-button class="md-primary md-raised" type="submit">Update</md-button>
+            </md-input-container>
+        </div>
+    </form>
+    <div layout="row" layout-align="left left">
+        <md-card md-theme="dark-purple" md-theme-watch>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{mp3details.Name}}</span>
+                    <span class="md-subhead">{{mp3details.Author}}</span>
+                    <span class="md-subhead">{{mp3details.AlbumName}}</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between">
+                <div class="md-media-xl card-media" layout="row" layout-align="center center">
+                    <img ng-src="Content/img/mp3.png" class="md-card-image">
+                </div>
+                <md-card-actions layout="column">
+                    <md-button class="md-icon-button" ng-click="editMP3File(mp3details.MP3FileID, mp3details.Name, mp3details.Author, mp3details.AlbumName)">
+                        <md-tooltip md-direction="right">Edit</md-tooltip>
+                        <i class="material-icons md-light">edit</i>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="showConfirm($event, mp3details.MP3FileID)">
+                        <md-tooltip md-direction="right">Delete</md-tooltip>
+                        <i class="material-icons md-light">delete</i>
+                    </md-button>
+                    <md-menu>
+                        <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mousedown="$mdMenu.open()">
+                            <md-tooltip md-direction="right">Add to playlist</md-tooltip>
+                            <i class="material-icons md-light">playlist_add</i>
+                        </md-button>
+                        <md-menu-content width="6">
+                            <md-menu-item ng-repeat="p in playlists.data">
+                                <md-button ng-click="announceClick(mp3details.MP3FileID, p.PlaylistID)">
+                                    {{p.Name}}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-card-actions>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>
 <md-input-container class="md-block">
-    <md-button class="md-primary md-raised" ng-href="#!/mp3files">Back</md-button>
+    <md-button class="md-primary md-raised" ng-href="#!/mp3files">Mp3 files</md-button>
 </md-input-container>

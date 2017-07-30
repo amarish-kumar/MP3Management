@@ -1,4 +1,5 @@
-﻿angular.module("RouteController", ["ngRoute"])
+﻿// routing config
+angular.module("RouteController", ["ngRoute"])
     .config(function ($routeProvider) {
     $routeProvider
         .when("/", {

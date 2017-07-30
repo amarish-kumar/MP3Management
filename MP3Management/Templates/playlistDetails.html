@@ -1,10 +1,11 @@
 ﻿<div ng-cloak>
     <md-toolbar class="md-theme-light">
         <div class="md-toolbar-tools">
+            <img ng-src="Content/img/playlist.png" class="md-avatar" alt="image" />
             <h2>
                 {{playlistDetails.Name}}
                 <md-tooltip md-direction="right">{{playlistDetails.Description}}</md-tooltip>
-            </h2> 
+            </h2>
             <span flex></span>
             <md-menu>
                 <md-button aria-label="Open menu" ng-click="$mdMenu.open($event)">
@@ -28,18 +29,24 @@
         <md-subheader class="md-no-sticky">{{playlistDetails.Description}}</md-subheader>
         <md-divider></md-divider>
         <md-list>
+            <!--list of all mp3 files in the current playlist-->
             <md-list-item class="md-3-line" ng-repeat="item in playlistDetails.MP3Files" ng-href="#!/mp3details/{{item.MP3FileID}}">
+                <!--routing-->
+                <img ng-src="Content/img/mp3.png" class="md-avatar" alt="image" />
                 <div class="md-list-item-text">
                     <h3>{{item.Name}}</h3>
                     <h4>{{item.Author}}</h4>
                     <p>{{item.AlbumName}}</p>
                 </div>
-                <md-button class="md-secondary" ng-click="showConfirm($event, item.MP3FileID, playlistDetails.PlaylistID)">Remove</md-button>
+                <md-button class="md-icon-button" ng-click="showConfirm($event, item.MP3FileID, playlistDetails.PlaylistID)">
+                    <md-tooltip md-direction="right">Remove</md-tooltip>
+                    <i class="material-icons md-dark">delete_sweep</i>
+                </md-button>
                 <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
         </md-list>
     </md-content>
 </div>
 <md-input-container class="md-block">
-    <md-button class="md-primary md-raised" ng-href="#!/playlist">Back</md-button>
+    <md-button class="md-primary md-raised" ng-href="#!/playlist">Playlists</md-button>
 </md-input-container>

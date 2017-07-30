@@ -1,42 +1,43 @@
 ﻿<div ng-cloak>
     <md-content>
         <md-list>
-            <div>
+            <div>   <!--input form--> 
                 <md-content class="md-no-momentum">
                     <form name="inputForm" ng-submit="addMP3File()">
                         <div layout="row" layout-align="space-around">
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Name</label>
-                            <input ng-model="new.MP3File.Name" required name="name">
-                            <div ng-messages="projectForm.clientName.$error">
-                                <div ng-message="required">This is required.</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Author</label>
-                            <input ng-model="new.MP3File.Author" required>
-                            <div ng-messages="projectForm.clientName.$error">
-                                <div ng-message="required">This is required.</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Album Name</label>
-                            <input ng-model="new.MP3File.AlbumName" required flex>
-                            <div ng-messages="projectForm.clientName.$error">
-                                <div ng-message="required">This is required.</div>
-                            </div>
-                        </md-input-container>
-                        <md-input-container class="md-block" ng-if="states.allowEditMP3File">
-                            <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
-                        </md-input-container>
-                        <md-input-container class="md-block" ng-if="states.allowEditMP3File">
-                            <md-button class="md-primary md-raised" ng-click="updatePlaylist()" type="submit">Update</md-button>
-                        </md-input-container>
-                        <md-input-container class="md-block" ng-if="states.allowEditMP3File === false">
-                            <md-button class="md-primary md-raised" type="submit">New</md-button>
-                        </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Name</label>
+                                <input ng-model="new.MP3File.Name" required name="name">
+                                <div ng-messages="projectForm.clientName.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Author</label>
+                                <input ng-model="new.MP3File.Author" required>
+                                <div ng-messages="projectForm.clientName.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Album Name</label>
+                                <input ng-model="new.MP3File.AlbumName" required flex>
+                                <div ng-messages="projectForm.clientName.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-block" ng-if="states.allowEditMP3File">
+                                <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
+                            </md-input-container>
+                            <md-input-container class="md-block" ng-if="states.allowEditMP3File">
+                                <md-button class="md-primary md-raised" ng-click="updateMP3File()">Update</md-button>
+                            </md-input-container>
+                            <md-input-container class="md-block" ng-if="states.allowEditMP3File === false">
+                                <md-tooltip md-direction="right">New mp3 file</md-tooltip>
+                                <md-button class="md-primary md-raised" type="submit">New</md-button>
+                            </md-input-container>
                         </div>
-                        </form>
+                    </form>  <!--search-->
                     <form ng-submit="searchMP3files(searchString, searchBy)">
                         <div layout="row" layout-align="left left">
                             <div layout="column" layout-align="space-between center" layout-margin>
@@ -53,22 +54,31 @@
                                     <div ng-message="required">This is required for search.</div>
                                 </div>
                             </md-input-container>
-                         </div>
-                     </form>
+                        </div>
+                    </form>
                 </md-content>
             </div>
             <md-divider></md-divider>
-            <md-list-item class="md-3-line" ng-repeat="file in model.data" ng-href="#!/mp3details/{{file.MP3FileID}}">
+            <!--mp3 list-->
+            <md-list-item class="md-3-line" ng-repeat="file in model.data" ng-href="#!/mp3details/{{file.MP3FileID}}"> <!--routing-->
+                <img ng-src="Content/img/mp3.png" class="md-avatar" alt="image" />
                 <div class="md-list-item-text">
                     <h3>{{ file.Name }}</h3>
                     <h4>{{ file.Author }}</h4>
                     <p>{{file.AlbumName}}</p>
                 </div>
-                <md-button class="md-secondary" ng-click="editMP3File(file.MP3FileID, file.Name, file.Author, file.AlbumName)">Edit</md-button>
-                <md-button class="md-secondary" ng-click="showConfirm($event, file.MP3FileID)">Delete</md-button>
+                <md-button class="md-icon-button" ng-click="editMP3File(file.MP3FileID, file.Name, file.Author, file.AlbumName)">
+                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                    <i class="material-icons md-dark">edit</i>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="showConfirm($event, file.MP3FileID)">
+                    <md-tooltip md-direction="bottom">Delete</md-tooltip>
+                    <i class="material-icons md-dark">delete</i>
+                </md-button>
                 <md-menu>
-                    <md-button aria-label="Add to Playlist" class="md-button" ng-mousedown="$mdMenu.open()">
-                        Add to
+                    <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mousedown="$mdMenu.open()">
+                        <md-tooltip md-direction="bottom">Add to playlist</md-tooltip>
+                        <i class="material-icons md-dark">playlist_add</i>
                     </md-button>
                     <md-menu-content width="6">
                         <md-menu-item ng-repeat="p in playlists.data">
