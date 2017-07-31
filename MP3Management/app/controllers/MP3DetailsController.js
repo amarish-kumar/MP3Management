@@ -22,7 +22,7 @@
                 $scope.status = "Record doesn't exist or deleted!";
             });
         // get all playlists
-        $http.get("/MP3File/Playlists").then(function (data) {
+        $http.get("/Playlists/Index").then(function (data) {
             $scope.playlists = data;
         });
         // show and fill edit form

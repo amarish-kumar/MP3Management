@@ -8,23 +8,14 @@
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Name</label>
                 <input ng-model="new.MP3File.Name" required name="name">
-                <div ng-messages="projectForm.clientName.$error">
-                    <div ng-message="required">This is required.</div>
-                </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Author</label>
                 <input ng-model="new.MP3File.Author" required>
-                <div ng-messages="projectForm.clientName.$error">
-                    <div ng-message="required">This is required.</div>
-                </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Album Name</label>
                 <input ng-model="new.MP3File.AlbumName" required flex>
-                <div ng-messages="projectForm.clientName.$error">
-                    <div ng-message="required">This is required.</div>
-                </div>
             </md-input-container>
             <md-input-container class="md-block">
                 <md-button class="md-primary md-raised" ng-click="cancelEdit()">Cancel</md-button>
@@ -57,11 +48,24 @@
                         <i class="material-icons md-light">delete</i>
                     </md-button>
                     <md-menu>
+                        <md-button aria-label="Member of" class="md-icon-button" ng-mousedown="$mdMenu.open()">
+                            <md-tooltip md-direction="right">Member of</md-tooltip>
+                            <i class="material-icons md-light">queue_music</i>
+                        </md-button>
+                        <md-menu-content width="3">
+                            <md-menu-item ng-repeat="pl in mp3details.Playlists">
+                                <div class="md-list-item-text" layout="column">
+                                    <p>{{pl.Name}}</p>
+                                </div>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                    <md-menu>
                         <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mousedown="$mdMenu.open()">
                             <md-tooltip md-direction="right">Add to playlist</md-tooltip>
                             <i class="material-icons md-light">playlist_add</i>
                         </md-button>
-                        <md-menu-content width="6">
+                        <md-menu-content width="3">
                             <md-menu-item ng-repeat="p in playlists.data">
                                 <md-button ng-click="announceClick(mp3details.MP3FileID, p.PlaylistID)">
                                     {{p.Name}}

@@ -1,22 +1,24 @@
 ﻿angular.module("PlaylistController", ['ngMaterial'])
-    .controller("PlaylistCtrl", ["$scope", "$http", "$mdDialog", function ($scope, $http, $mdDialog) {
+    .controller("PlaylistCtrl", ["$scope", "$http", "$mdDialog", "$window", function ($scope, $http, $mdDialog, $window) {
         $scope.model = {};
         $scope.new = {
             Playlist: {}
-        }
+        };
         $scope.states = {
-            allowEditPlaylist: false
+            allowEditPlaylist: false,
+            isLoading: true
         };
         $scope.status = '  ';
         $scope.customFullscreen = false;
         //get all playlists
         $http.get("/Playlists/Index").then(function (data) {
             $scope.model = data;
+            $scope.states.isLoading = false;
         });
         // create new playlist
         $scope.createPlaylist = function () {
             // check non empty object
-            if (Object.keys($scope.new.Playlist).length > 0 ) {
+            if (Object.keys($scope.new.Playlist).length > 0) {
                 $http.post('/Playlists/Create', $scope.new.Playlist).then(function (response) {
                     $scope.model.data.push(response.data);
                     $scope.cancelEdit();
@@ -40,11 +42,14 @@
         $scope.editPlaylist = function (id, name, description) {
             $scope.new.Playlist = { PlaylistID: id, Name: name, Description: description };
             $scope.states.allowEditPlaylist = true;
+            $window.scrollTo(0, 0);
         };
         // hide edit and cancel button
         $scope.cancelEdit = function () {
             $scope.new.Playlist = {};
             $scope.states.allowEditPlaylist = false;
+            $scope.inputPlaylist.$setUntouched();
+            $scope.inputPlaylist.$setPristine();
         };
         // delete playlist
         $scope.deletePlaylist = function (id) {
@@ -52,7 +57,7 @@
                 $http.get("/Playlists/Index").then(function (data) {
                     $scope.model = data;
                 });
-                $scope.showAlert("Playlist successfully deleted!", "")
+                $scope.showAlert("Playlist successfully deleted!", "");
             }).catch(function onError(response) {
                 $scope.showAlert("Error deleting playlist", response.status + " " + response.statusText);
             });
@@ -60,7 +65,7 @@
         //confirm dialog
         $scope.showConfirm = function (ev, PlaylistID, PlaylistName) {
             var confirm = $mdDialog.confirm()
-                .title("Are you sure you want to delete the playlist \"" + PlaylistName+"\"?")
+                .title("Are you sure you want to delete the playlist \"" + PlaylistName + "\"?")
                 .textContent('The action is irreversible!')
                 .ariaLabel('Delete playlist')
                 .targetEvent(ev)
@@ -84,4 +89,4 @@
                     .targetEvent(ev)
             );
         };
-    }])
+    }]);

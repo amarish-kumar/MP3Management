@@ -158,6 +158,10 @@
     <Compile Include="Migrations\201707251247402_InitialCreate.Designer.cs">
       <DependentUpon>201707251247402_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707302204422_migration2.cs" />
+    <Compile Include="Migrations\201707302204422_migration2.Designer.cs">
+      <DependentUpon>201707302204422_migration2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\MP3File.cs" />
     <Compile Include="Models\Playlist.cs" />
@@ -1032,6 +1036,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201707251247402_InitialCreate.resx">
       <DependentUpon>201707251247402_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707302204422_migration2.resx">
+      <DependentUpon>201707302204422_migration2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

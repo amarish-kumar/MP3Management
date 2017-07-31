@@ -28,6 +28,8 @@
     <md-content>
         <md-subheader class="md-no-sticky">{{playlistDetails.Description}}</md-subheader>
         <md-divider></md-divider>
+        <!--progress-->
+        <md-progress-linear md-mode="indeterminate" ng-show="states.isLoading"></md-progress-linear>
         <md-list>
             <!--list of all mp3 files in the current playlist-->
             <md-list-item class="md-3-line" ng-repeat="item in playlistDetails.MP3Files" ng-href="#!/mp3details/{{item.MP3FileID}}">

@@ -1,21 +1,23 @@
 ﻿angular.module('MP3FilesController', ['ngMaterial'])
-    .controller('MP3FilesCtrl', ['$scope', '$http', '$mdDialog', function ($scope, $http, $mdDialog) {
+    .controller('MP3FilesCtrl', ['$scope', '$http', '$mdDialog', '$window',  function ($scope, $http, $mdDialog, $window) {
         $scope.model = {};
         $scope.playlists = {};
         // show/hide edit and cancel buttons
-        $scope.states = {          
-            allowEditMP3File: false 
+        $scope.states = {
+            allowEditMP3File: false,
+            isLoading: true
         };
         $scope.new = {
             MP3File: {}
-        }
+        };
         // get all mp3 files
-        $http.get("/MP3File/Index").then(function (data) { 
+        $http.get("/MP3File/Index").then(function (data) {
             $scope.model = data;
         });
         //get only list of playlists
         $http.get("/Playlists/Index").then(function (data) {
             $scope.playlists = data;
+            $scope.states.isLoading = false;
         });
         // new mp3 file
         $scope.addMP3File = function () {
@@ -23,7 +25,7 @@
                 $scope.model.data.push(response.data);
                 $scope.cancelEdit();
             });
-            $scope.new.MP3File = {};
+            $scope.cancelEdit();
         };
         // edit mp3 file
         $scope.updateMP3File = function () {
@@ -41,7 +43,7 @@
                 $http.get("/MP3File/Index").then(function (data) {
                     $scope.model = data;
                 });
-                $scope.showAlert("Record successfully deleted!", "")
+                $scope.showAlert("Record successfully deleted!", "");
             }).catch(function onError(response) {
                 $scope.showAlert("Error deleting record", response.status + " " + response.statusText);
             });
@@ -50,18 +52,21 @@
         $scope.cancelEdit = function () {
             $scope.new.MP3File = {};
             $scope.states.allowEditMP3File = false;
+            $scope.inputForm.$setUntouched();
+            $scope.inputForm.$setPristine();
         };
         // shows edit form, filled with mp3 data
         $scope.editMP3File = function (id, name, author, albumName) {
             $scope.new.MP3File = { MP3FileID: id, Name: name, Author: author, AlbumName: albumName };
             $scope.states.allowEditMP3File = true;
+            $window.scrollTo(0, 0);
         };
         // add mp3file to playlist
         $scope.announceClick = function (mp3Id, playlistId) {
-            $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId : playlistId}).then(function (response) {
-                $scope.showAlert("Record successfully added to the playlist!", "") 
+            $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId: playlistId }).then(function (response) {
+                $scope.showAlert("Record successfully added to the playlist!", "");
             }).catch(function onError(response) {
-                if (response.status == 400) {
+                if (response.status === 400) {
                     $scope.showAlert("Error adding record", "Record already exists!");
                 } else {
                     $scope.showAlert("Error adding record", response.status + " " + response.statusText);
@@ -76,7 +81,7 @@
                 method: "get"
             })
                 .then(function (response) {
-                $scope.model = response;
+                    $scope.model = response;
                 });
         };
         // confirm dialog
@@ -106,5 +111,4 @@
                     .targetEvent(ev)
             );
         };
-    }])
-
+    }]);

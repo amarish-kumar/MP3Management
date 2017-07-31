@@ -2,7 +2,9 @@
     .controller("PlaylistDetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
         $scope.playlistDetails = {};
         $scope.allmp3files = {};
-
+        $scope.states = {
+            isLoading: true
+        };
         // routing parametar
         $http({
             url: "/Playlists/PlaylistDetails",
@@ -11,6 +13,7 @@
         })
             .then(function (response) {
                 $scope.playlistDetails = response.data;
+                $scope.states.isLoading = false;
             });
         //all mp3 files
         $http.get("/MP3File/Index").then(function (data) {

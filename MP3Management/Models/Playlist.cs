@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MP3Management.Models
 {
@@ -9,6 +10,7 @@ namespace MP3Management.Models
             this.MP3Files = new HashSet<MP3File>();
         }
         public int PlaylistID { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
 

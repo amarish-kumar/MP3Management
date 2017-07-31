@@ -9,9 +9,6 @@
                             <md-input-container class="md-block" flex="20">
                                 <label>Name</label>
                                 <input ng-model="new.Playlist.Name" required>
-                                <div ng-messages="projectForm.clientName.$error">
-                                    <div ng-message="required">This is required.</div>
-                                </div>
                             </md-input-container>
                             <md-input-container class="md-block" flex="70">
                                 <label>Description</label>
@@ -32,6 +29,8 @@
                 </md-content>
             </div>
             <md-divider></md-divider>
+            <!--progress-->
+            <md-progress-linear md-mode="indeterminate" ng-show="states.isLoading"></md-progress-linear>
             <!--playlists list-->
             <md-list-item class="md-3-line" ng-repeat="p in model.data" ng-href="#!/playlistDetails/{{p.PlaylistID}}">
                 <img ng-src="Content/img/playlist.png" class="md-avatar" alt="image" />
