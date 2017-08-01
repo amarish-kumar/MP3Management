@@ -47,25 +47,18 @@
                         <md-tooltip md-direction="right">Delete</md-tooltip>
                         <i class="material-icons md-light">delete</i>
                     </md-button>
+
                     <md-menu>
-                        <md-button aria-label="Member of" class="md-icon-button" ng-mousedown="$mdMenu.open()">
-                            <md-tooltip md-direction="right">Member of</md-tooltip>
-                            <i class="material-icons md-light">queue_music</i>
-                        </md-button>
-                        <md-menu-content width="3">
-                            <md-menu-item ng-repeat="pl in mp3details.Playlists">
-                                <div class="md-list-item-text" layout="column">
-                                    <p>{{pl.Name}}</p>
-                                </div>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                    <md-menu>
-                        <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mousedown="$mdMenu.open()">
-                            <md-tooltip md-direction="right">Add to playlist</md-tooltip>
+                        <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
                             <i class="material-icons md-light">playlist_add</i>
                         </md-button>
-                        <md-menu-content width="3">
+                        <md-menu-content width="3" ng-mouseleave="$mdMenu.close()">
+                            <md-menu-item>
+                                <div class="md-list-item-text" layout="column">
+                                    <p><b>Add to playlist:</b></p>
+                                </div>
+                            </md-menu-item>
+                            <md-divider></md-divider>
                             <md-menu-item ng-repeat="p in playlists.data">
                                 <md-button ng-click="announceClick(mp3details.MP3FileID, p.PlaylistID)">
                                     {{p.Name}}
@@ -75,6 +68,27 @@
                     </md-menu>
                 </md-card-actions>
             </md-card-content>
+            <md-card-footer layout="row" layout-align="center center">
+                <span class="md-subhead"><small>member of {{mp3details.Playlists.length}} playlists</small></span>
+                <md-menu>
+                    <md-button aria-label="Member of" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+                        <i class="material-icons md-light">queue_music</i>
+                    </md-button>
+                    <md-menu-content width="3" ng-mouseleave="$mdMenu.close()">
+                        <md-menu-item>
+                            <div class="md-list-item-text" layout="column">
+                                <p><b>Member of:</b></p>
+                            </div>
+                        </md-menu-item>
+                        <md-divider></md-divider>
+                        <md-menu-item ng-repeat="pl in mp3details.Playlists">
+                            <md-button ng-href="#!/playlistDetails/{{pl.PlaylistID}}">
+                                {{pl.Name}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-card-footer>
         </md-card>
     </div>
 </div>

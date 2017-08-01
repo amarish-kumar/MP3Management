@@ -16,29 +16,41 @@ namespace MP3Management.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Playlists
-        public ActionResult Index()
+        public JsonResult Index()
         {
-            var data = db.Playlist.Include(path => path.MP3Files).ToList();
-            return Content(JsonConvert.SerializeObject(data, Formatting.Indented,
-                new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+            db.Configuration.ProxyCreationEnabled = false;
+            return this.Json((from obj in db.Playlist
+                              select new
+                              {
+                                  PlaylistID = obj.PlaylistID,
+                                  Name = obj.Name,
+                                  Description = obj.Description,
+                                  MP3Files = obj.MP3Files,
+                              }), JsonRequestBehavior.AllowGet);
         }
 
         // GET: Playlists/Details/5
-        public ActionResult PlaylistDetails(int? id)
+        public JsonResult PlaylistDetails(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(new { statuscode = new HttpStatusCodeResult(HttpStatusCode.BadRequest) });
             }
 
-            var data = db.Playlist.Where(s => s.PlaylistID == id).Include(m => m.MP3Files).FirstOrDefault();
+            db.Configuration.ProxyCreationEnabled = false;
+            var data = db.Playlist.Select(p => new
+            {
+                PlaylistID = p.PlaylistID,
+                Name = p.Name,
+                Description = p.Description,
+                MP3Files = p.MP3Files
+            }).Where(s => s.PlaylistID == id).FirstOrDefault();
 
             if (data == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                return Json(new { statuscode = new HttpStatusCodeResult(HttpStatusCode.NotFound) });
             }
-            return Content(JsonConvert.SerializeObject(data, Formatting.Indented,
-                new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+            return this.Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -48,7 +60,7 @@ namespace MP3Management.Controllers
             {
                 db.Playlist.Add(playlist);
                 db.SaveChanges();
-                return Json(playlist, JsonRequestBehavior.AllowGet); ;
+                return Json(playlist, JsonRequestBehavior.AllowGet);
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
@@ -60,8 +72,16 @@ namespace MP3Management.Controllers
             {
                 db.Entry(playlist).State = EntityState.Modified;
                 db.SaveChanges();
-                return Content(JsonConvert.SerializeObject(playlist, Formatting.Indented,
-                     new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+
+                db.Configuration.ProxyCreationEnabled = false;
+                var data = db.Playlist.Select(p => new
+                {
+                    PlaylistID = p.PlaylistID,
+                    Name = p.Name,
+                    Description = p.Description,
+                    MP3Files = p.MP3Files
+                }).Where(s => s.PlaylistID == playlist.PlaylistID).FirstOrDefault();
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
@@ -101,6 +121,39 @@ namespace MP3Management.Controllers
             {
                 return new HttpStatusCodeResult(ex.HResult);
 
+            }
+        }
+
+        //add mp3 to playlist
+        [HttpPost]
+        public ActionResult AddToPlaylist(int mp3Id, int playlistId)
+        {
+            try
+            {
+                MP3File mp3file = db.MP3File.Find(mp3Id);
+                Playlist playlist = db.Playlist.Find(playlistId);
+                if (!playlist.MP3Files.Contains(mp3file))
+                {
+                    playlist.MP3Files.Add(mp3file);
+                    db.Entry(playlist).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    //response
+                    var data = db.MP3File.Select(p => new
+                    {
+                        MP3FileID = p.MP3FileID,
+                        Name = p.Name,
+                        Author = p.Author,
+                        AlbumName = p.AlbumName,
+                    }).Where(s => s.MP3FileID == mp3Id).FirstOrDefault();
+                    return Content(JsonConvert.SerializeObject(data, Formatting.Indented,
+                        new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }), "application/json");
+                }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(ex.HResult);
             }
         }
 

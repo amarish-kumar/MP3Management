@@ -21,9 +21,16 @@
         });
         // add mp3 file to playlist
         $scope.announceClick = function (mp3Id, playlistId) {
-            $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId: playlistId }).then(function (response) {
+            $http({
+                method: 'POST',
+                url: '/Playlists/AddToPlaylist',
+                headers: {
+                    'Content-Type': undefined
+                },
+                params: { mp3Id: mp3Id, playlistId: playlistId }
+            }).then(function successCallback(response) {
                 $scope.playlistDetails.MP3Files.push(response.data);
-            }).catch(function onError(response) {
+            }, function errorCallback(response) {
                 // only distinct elements allowed in playlist
                 if (response.status == 400) {
                     $scope.showAlert("Error adding record", "Record already exists!");

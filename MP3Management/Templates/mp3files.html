@@ -1,7 +1,8 @@
 ﻿<div ng-cloak>
     <md-content>
         <md-list>
-            <div id="input">   <!--input form--> 
+            <div id="input">
+                <!--input form-->
                 <md-content class="md-no-momentum">
                     <form name="inputForm" ng-submit="addMP3File()">
                         <div layout="row" layout-align="space-around">
@@ -41,6 +42,9 @@
                             <md-input-container class="md-block">
                                 <label>Search</label>
                                 <input ng-model="searchString" required name="search">
+                                <div ng-if="states.search">
+                                    <p>{{searchBy}}: "{{searchString}}" {{model.data.length}} results</p>
+                                </div>
                             </md-input-container>
                         </div>
                     </form>
@@ -50,13 +54,32 @@
             <!--progress-->
             <md-progress-linear md-mode="indeterminate" ng-show="states.isLoading"></md-progress-linear>
             <!--mp3 list-->
-            <md-list-item class="md-3-line" ng-repeat="file in model.data" ng-href="#!/mp3details/{{file.MP3FileID}}"> <!--routing-->
+            <md-list-item class="md-3-line" ng-repeat="file in model.data" ng-href="#!/mp3details/{{file.MP3FileID}}">
+                <!--routing-->
                 <img ng-src="Content/img/mp3.png" class="md-avatar" alt="image" />
                 <div class="md-list-item-text">
                     <h3>{{ file.Name }}</h3>
                     <h4>{{ file.Author }}</h4>
                     <p>{{file.AlbumName}}</p>
                 </div>
+                <md-menu>
+                    <md-button aria-label="Member of" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+                        <i class="material-icons md-dark">queue_music</i>
+                    </md-button>
+                    <md-menu-content width="3" ng-mouseleave="$mdMenu.close()">
+                        <md-menu-item>
+                            <div class="md-list-item-text" layout="column">
+                                <p><b>Member of:</b></p>
+                            </div>
+                        </md-menu-item>
+                        <md-divider></md-divider>
+                        <md-menu-item ng-repeat="pl in file.Playlists">
+                            <md-button ng-href="#!/playlistDetails/{{pl.PlaylistID}}">
+                                {{pl.Name}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
                 <md-button class="md-icon-button" ng-click="editMP3File(file.MP3FileID, file.Name, file.Author, file.AlbumName)">
                     <md-tooltip md-direction="bottom">Edit</md-tooltip>
                     <i class="material-icons md-dark">edit</i>
@@ -66,24 +89,16 @@
                     <i class="material-icons md-dark">delete</i>
                 </md-button>
                 <md-menu>
-                    <md-button aria-label="Member of" class="md-icon-button" ng-mousedown="$mdMenu.open()">
-                        <md-tooltip md-direction="bottom">Member of</md-tooltip>
-                        <i class="material-icons md-dark">queue_music</i>
-                    </md-button>
-                    <md-menu-content width="3">
-                        <md-menu-item ng-repeat="pl in file.Playlists">
-                            <div class="md-list-item-text" layout="column">
-                                <p>{{pl.Name}}</p>
-                            </div>    
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-                <md-menu>
-                    <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mousedown="$mdMenu.open()">
-                        <md-tooltip md-direction="bottom">Add to playlist</md-tooltip>
+                    <md-button aria-label="Add to Playlist" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
                         <i class="material-icons md-dark">playlist_add</i>
                     </md-button>
-                    <md-menu-content width="3">
+                    <md-menu-content width="3" ng-mouseleave="$mdMenu.close()">
+                        <md-menu-item>
+                            <div class="md-list-item-text" layout="column">
+                                <p><b>Add to playlist:</b></p>
+                            </div>
+                        </md-menu-item>
+                        <md-divider></md-divider>
                         <md-menu-item ng-repeat="p in playlists.data">
                             <md-button ng-click="announceClick(file.MP3FileID, p.PlaylistID)">
                                 {{p.Name}}

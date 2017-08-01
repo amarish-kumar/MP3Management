@@ -12,7 +12,8 @@ namespace MP3Management
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.IgnoreRoute("index.html/{*pathInfo}");
+            routes.IgnoreRoute("");
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

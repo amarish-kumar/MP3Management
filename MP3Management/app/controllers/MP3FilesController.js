@@ -5,7 +5,8 @@
         // show/hide edit and cancel buttons
         $scope.states = {
             allowEditMP3File: false,
-            isLoading: true
+            isLoading: true,
+            search: false
         };
         $scope.new = {
             MP3File: {}
@@ -64,6 +65,11 @@
         // add mp3file to playlist
         $scope.announceClick = function (mp3Id, playlistId) {
             $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId: playlistId }).then(function (response) {
+                //push playlist to mp3file
+                var index = $scope.model.data.map(function (element) {
+                    return element.MP3FileID;
+                }).indexOf(mp3Id);
+                $scope.model.data[index].Playlists.push(response.data);
                 $scope.showAlert("Record successfully added to the playlist!", "");
             }).catch(function onError(response) {
                 if (response.status === 400) {
@@ -75,6 +81,7 @@
         };
         // search, parametars are searching string and searchBy selection. Possible implementation without SearchBy selection in .cs controller
         $scope.searchMP3files = function (searchString, searchBy) {
+            $scope.states.search = true;
             $http({
                 url: "/MP3File/Search",
                 params: { SearchString: searchString, SearchBy: searchBy },

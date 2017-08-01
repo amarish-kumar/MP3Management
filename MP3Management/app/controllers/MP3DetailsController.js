@@ -55,10 +55,24 @@
         };
         //add to playlist
         $scope.announceClick = function (mp3Id, playlistId) {
-            $http.post('/MP3File/AddToPlaylist', { mp3Id: mp3Id, playlistId: playlistId }).then(function (response) {
-                $scope.showAlert("Record successfully added to the playlist!", "")
-            }).catch(function onError(response) {
-                $scope.showAlert("Error adding record", response.status + " " + response.statusText);
+            $http({
+                method: 'POST',
+                url: '/MP3File/AddToPlaylist',
+                headers: {
+                    'Content-Type': undefined
+                },
+                params: { mp3Id: mp3Id, playlistId: playlistId }
+            }).then(function successCallback(response) {
+                //push playlist to mp3file
+                $scope.mp3details.Playlists.push(response.data);
+                $scope.showAlert("Record successfully added to the playlist!", "");
+            }, function errorCallback(response) {
+                // only distinct elements allowed in playlist
+                if (response.status == 400) {
+                    $scope.showAlert("Error adding record", "Record already exists!");
+                } else {
+                    $scope.showAlert("Error adding record", response.status + " " + response.statusText);
+                }
             });
         };
         // confirm dialog

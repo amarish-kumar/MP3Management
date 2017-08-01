@@ -37,6 +37,7 @@
                 <div class="md-list-item-text">
                     <h3>{{ p.Name }}</h3>
                     <h4>{{ p.Description }}</h4>
+                    <p>{{p.MP3Files.length}} mp3 files</p>
                     <p ng-if="p.MP3Files[0]">{{p.MP3Files[0].Name}}, {{p.MP3Files[1].Name}} ...</p>
                 </div>
                 <!--playlist control buttons-->
