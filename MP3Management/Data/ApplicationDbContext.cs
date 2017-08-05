@@ -6,6 +6,9 @@ namespace MP3Management.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext() : base("name=MP3ManagementDbConnection")
+        {
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
