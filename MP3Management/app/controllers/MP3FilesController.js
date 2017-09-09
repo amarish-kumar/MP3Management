@@ -1,5 +1,4 @@
-﻿angular.module('MP3FilesController', ['ngMaterial'])
-    .controller('MP3FilesCtrl', ['$scope', '$http', '$mdDialog', '$window',  function ($scope, $http, $mdDialog, $window) {
+﻿    app.controller('MP3FilesCtrl', ['$scope', '$http', '$mdDialog', '$window',  function ($scope, $http, $mdDialog, $window) {
         $scope.model = {};
         $scope.playlists = {};
         // show/hide edit and cancel buttons

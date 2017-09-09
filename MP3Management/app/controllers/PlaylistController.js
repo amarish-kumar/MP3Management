@@ -1,5 +1,4 @@
-﻿angular.module("PlaylistController", ['ngMaterial'])
-    .controller("PlaylistCtrl", ["$scope", "$http", "$mdDialog", "$window", function ($scope, $http, $mdDialog, $window) {
+﻿    app.controller("PlaylistCtrl", ["$scope", "$http", "$mdDialog", "$window", function ($scope, $http, $mdDialog, $window) {
         $scope.model = {};
         $scope.new = {
             Playlist: {}

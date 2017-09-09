@@ -1,6 +1,5 @@
 ﻿// routing config
-angular.module("RouteController", ["ngRoute"])
-    .config(function ($routeProvider) {
+    app.config(function ($routeProvider) {
         $routeProvider
             .when("/", {
                 templateUrl: "Templates/mp3files.html",

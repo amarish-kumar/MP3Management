@@ -1,5 +1,4 @@
-﻿angular.module("MP3DetailsController", ['ngMaterial'])
-    .controller("MP3DetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
+﻿    app.controller("MP3DetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
         $scope.mp3details = {};
         $scope.status = null;
         $scope.playlists = {};
@@ -103,7 +102,7 @@
             );
         };
     }]) // card themes
-    .config(function ($mdThemingProvider) {
+    app.config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
         $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
         $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();

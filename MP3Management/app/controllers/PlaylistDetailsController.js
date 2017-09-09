@@ -1,5 +1,4 @@
-﻿angular.module("PlaylistDetailsController", [])
-    .controller("PlaylistDetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
+﻿    app.controller("PlaylistDetailsCtrl", ["$scope", "$http", "$routeParams", "$mdDialog", function ($scope, $http, $routeParams, $mdDialog) {
         $scope.playlistDetails = {};
         $scope.allmp3files = {};
         $scope.states = {
