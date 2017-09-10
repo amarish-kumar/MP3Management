@@ -64,5 +64,5 @@
 
 
 * linguist-vendored
-*app/*.js linguist-vendored=false
+*app*.js linguist-vendored=false
 *.cs linguist-vendored=false
