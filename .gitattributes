@@ -65,5 +65,5 @@
 
 * linguist-vendored
 *app*.js linguist-vendored=false
-*app*controllers*.js linguist-vendored=false
+*controllers*.js linguist-vendored=false
 *.cs linguist-vendored=false
