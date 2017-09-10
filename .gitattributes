@@ -61,3 +61,10 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# ignore language in speciffied directories
+#
+###############################################################################
+Content/* linguist-vendored
+Scripts/* linguist-vendored
