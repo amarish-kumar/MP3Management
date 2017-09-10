@@ -66,5 +66,5 @@
 # ignore language in speciffied directories
 #
 ###############################################################################
-Content/* linguist-vendored
-Scripts/* linguist-vendored
+Content/* linguist-vendored=true
+Scripts/* linguist-vendored=true
